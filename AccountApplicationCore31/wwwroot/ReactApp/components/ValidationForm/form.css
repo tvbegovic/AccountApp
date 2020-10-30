@@ -1,0 +1,7 @@
+.was-validated .form-control:valid~.invalid-feedback {
+    display: none;
+}
+
+.was-validated .form-control:invalid~.invalid-feedback {
+    display: block;
+}

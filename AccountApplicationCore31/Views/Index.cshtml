@@ -1,0 +1,86 @@
+﻿@using System.Diagnostics
+@using System.IO
+@using Microsoft.AspNetCore.Http
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+	
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<base href="/"/>
+    <title>Partners application form</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="~/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+<body onload="onload">
+
+    <div class="main" id="app">
+
+        
+
+    </div>
+
+<!-- JS -->
+<div id="session"></div>
+<script>
+	var sessionKey = '@ViewBag.sessionKey';
+</script>
+	@if (Debugger.IsAttached)
+	{
+		<script src="~/distdev/app.bundle.js"></script>
+	}
+	else
+	{
+		IEnumerable<string> fileEntries = Enumerable.Empty<string>();
+
+		List<string> bundles = new List<string>();
+
+		var rootPath = ViewBag.rootPath;
+		if (rootPath == null)
+		{
+			rootPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+		}
+		if (rootPath != null)
+		{
+			fileEntries = Directory.EnumerateFiles(System.IO.Path.Combine(rootPath,"dist"));
+			bundles.Add("app.");
+
+			foreach (string bundleName in bundles)
+			{
+				foreach (string fileName in fileEntries)
+				{
+					FileInfo fileInfo = new FileInfo(fileName);
+					if (fileInfo.Name.Contains(bundleName) && fileInfo.Name.Contains(".map") == false)
+					{
+						if (fileInfo.Name.Contains("css"))
+						{
+							<link href="~/dist/@fileInfo.Name" rel="stylesheet" />
+						}
+						else
+						{
+							<script src="~/dist/@fileInfo.Name"></script>
+						}
+
+					}
+
+				}
+
+			}
+		}
+		
+
+	}
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
